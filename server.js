@@ -8,11 +8,9 @@ const awsConfig =  require('./configuration/aws_config')
  var s3 = new AWS.S3();
 
  
- app.get('/upload' , (req,res)=>{
-
-
-    var filePath = "./test.txt";
+ app.get('/upload' , (req,res)=> {
     
+   var filePath = "./package.json"; 
     //configuring parameters
     
      var params = {
@@ -22,12 +20,15 @@ const awsConfig =  require('./configuration/aws_config')
     };
     
     s3.upload(params, function (err, data) {
+      
       if (err) {
         console.log("Error", err);
       }
+       
       if (data) {
         console.log("Uploaded in:", data.Location);
       }
+       
     });
    
 
