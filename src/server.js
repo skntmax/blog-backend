@@ -12,10 +12,10 @@ let port  = process.env.PORT
 middlewares(app)
 // ----------------middlewares ---------------
   
-
 app.get( '/'  , (req,res)=> {      
      console.log("home page " , req.body );
 })
+
 
 app.listen(port,()=>{
    console.log(" server connected at  "+port );

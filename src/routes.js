@@ -37,7 +37,6 @@ router.post('/post', async (req, res) => {
 router.post('/image', upload.single('file'), async(req, res) => {
       const {fieldname,originalname,encoding,mimetype,destination,filename,path,size, } = req.file
       const {id} = req.body 
-       
       try { 
             console.log('====================================');
             console.log(" file saved id ", id  );
@@ -62,6 +61,52 @@ router.post('/image', upload.single('file'), async(req, res) => {
 
 })
 
+
+router.get('/get-blogs' ,async  (req,res)=>{
+        
+       try{
+              let blogs =  await  blogsModel.find({})
+               if(blogs) {
+                  res.status(200).send({
+                        status: 200,
+                        result: blogs                       }) 
+               }
+             
+        } catch(err) {
+            res.status(500).send({
+                  status: 500,
+                  result: "some erro ouccured " + err
+            })
+             
+        }
+
+})
+
+
+
+
+
+router.post('/update', async (req,res)=>{
+
+    try{
+       const {_id,disc}  = req.body
+       let updated = await blogsModel.findByIdAndUpdate(_id ,{disc:disc})
+       console.log(" updated blog " , updated) 
+       if(updated){
+            res.status(200).send({
+                  status: 200,
+                  result: updated }) 
+
+       } 
+        
+    }catch(err){
+      res.status(500).send({
+            status: 500,
+            result: "no updated  " + err
+      })  
+    }
+      
+      })
 
 
 router.get('/files', (req,res)=>{
