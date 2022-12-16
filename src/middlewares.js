@@ -4,8 +4,10 @@ import bodyParser from 'body-parser'
 import router from  './routes'
 import path from 'path' 
 import {fileURLToPath} from 'url';
+
+
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+export const __dirname = path.dirname(__filename);
 
 
 var corsOptions = {

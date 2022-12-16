@@ -10,12 +10,7 @@ let conn;
      }catch(err){ 
           throw new Error(err)
        }
-        
 })()   
-
-
-
-
  
 
 export {conn }
