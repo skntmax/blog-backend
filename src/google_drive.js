@@ -6,10 +6,7 @@ import {fileURLToPath} from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
-
 // let SCOPES =  ['https://www.googleapis.com/auth/drive']
-
 
 export const authenticateGoogle = () => {
    const auth = new google.auth.GoogleAuth({
@@ -30,6 +27,7 @@ export  const uploadToGoogleDrive = async (file, auth) => {
      body: fs.createReadStream(file.path),
    };
  
+    
    const driveService = google.drive({ version: "v3", auth });
  
    const response = await driveService.files.create({
@@ -37,15 +35,15 @@ export  const uploadToGoogleDrive = async (file, auth) => {
      media: media,
      fields: "id",
    });
+    
    return response;
  };
 
-
+  
 // const auth = new google.auth.GoogleAuth({
 //    keyFile:JSON.stringify( google_key) ,
 //    scopes:SCOPES
 // })
-
 
 // createAndUploadFile(auth)
 

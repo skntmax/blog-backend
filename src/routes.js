@@ -39,6 +39,61 @@ router.post('/post', async (req, res) => {
 
   
 
+// router.post('/image', upload.single('file') , async(req, res) => {
+//       const {id} = req.body 
+//       try { 
+//             console.log('====================================');
+//             console.log(" file saved id ", id  );
+//             console.log(' ====================================');
+
+//             let file = req.file
+//             console.log(" req files " , req.file ); 
+//              let extArray  = file.originalname.split('.')[1]
+//              let ext =  extArray[extArray.length-1]   
+//             let filName = new Date().getTime()+" "+file.originalname
+//              let thumbnail = fs.createReadStream(file.path)
+//              var params = {
+//                 Bucket: config.bucketName,
+//                 Body : thumbnail ,
+//                 Key : "my-uploads/"+Date.now()+"_"+filName  
+//                };
+                 
+//                s3.upload(params,async (err,data)=>{
+//                 if (err) throw new Error(err)
+//                 console.log("Uploaded in:", data.Location);
+//                 let update = {image:[req.file.originalname, data.Location ] };
+//                  await blogsModel.findByIdAndUpdate(id , update)
+//                   unlinkSync(path.join(__dirname,'..', file.path ))
+//                   res.status(200).send({
+//                        status: 200,
+//                        result: " file saved succesfully  "
+//                       })         
+//            } )
+      
+      
+//       }catch (err) {
+//             res.status(500).send({
+//                   status: 500,
+//                   result: "some erro ouccured " + err
+//             })
+//         }
+//   })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 router.post('/image', upload.single('file') , async(req, res) => {
       const {id} = req.body 
       try { 
@@ -46,31 +101,23 @@ router.post('/image', upload.single('file') , async(req, res) => {
             console.log(" file saved id ", id  );
             console.log(' ====================================');
 
-            let file = req.file
-            console.log(" req files " , req.file ); 
-             let extArray  = file.originalname.split('.')[1]
-             let ext =  extArray[extArray.length-1]   
-            let filName = new Date().getTime()+" "+file.originalname
-             let thumbnail = fs.createReadStream(file.path)
-             var params = {
-                Bucket: config.bucketName,
-                Body : thumbnail ,
-                Key : "my-uploads/"+Date.now()+"_"+filName  
-               };
-                 
-               s3.upload(params,async (err,data)=>{
-                if (err) throw new Error(err)
-                console.log("Uploaded in:", data.Location);
-                let update = {image:[req.file.originalname, data.Location ] };
-                 await blogsModel.findByIdAndUpdate(id , update)
-                  unlinkSync(path.join(__dirname,'..', file.path ))
-                  res.status(200).send({
+           
+            if (!req.file) {
+                  res.status(400).send("No file uploaded.");
+                  return;
+            }
+
+            const auth = authenticateGoogle();
+            const response = await uploadToGoogleDrive(req.file, auth);
+            deleteFile(req.file.path);
+            let update = {image:[req.file.originalname, `https://drive.google.com/uc?export=view&id=${response.data.id}` ] };
+            await blogsModel.findByIdAndUpdate(id , update)
+             
+                 res.status(200).send({
                        status: 200,
                        result: " file saved succesfully  "
-                      })         
-           } )
-      
-      
+                      })    
+                
       }catch (err) {
             res.status(500).send({
                   status: 500,
@@ -79,10 +126,11 @@ router.post('/image', upload.single('file') , async(req, res) => {
         }
   })
 
-   
+
+
+
 
 router.post('/s3-upload',upload.single('file'), (req, res) => {
-      
       try { 
              let file = req.file
         console.log(" req files " , req.file ); 
@@ -197,9 +245,8 @@ router.get('/upload-file', (req,res)=>{
       });
     };
 
-
-
      
+    
  router.post("/upload-file-to-google-drive", upload.single("file"),async (req, res, next)=>{
       try {
         if (!req.file) {
