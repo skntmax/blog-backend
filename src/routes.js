@@ -5,6 +5,8 @@ import fs, { createReadStream, unlink, unlinkSync } from 'fs'
 import {fileURLToPath} from 'url';
 import path from 'path';
 import {s3} from './s3Bucket'
+import { uploadToGoogleDrive  , authenticateGoogle } from './google_drive' 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -149,8 +151,7 @@ router.post('/update', async (req,res)=>{
             res.status(200).send({
                   status: 200,
                   result: updated }) 
-
-       } 
+          } 
         
     }catch(err){
       res.status(500).send({
@@ -172,7 +173,6 @@ router.get('/files', (req,res)=>{
 
 
 router.get('/upload-file', (req,res)=>{
-       
       var filePath = "./package.json"; 
         //configuring parameters
      var params = {
@@ -186,8 +186,33 @@ router.get('/upload-file', (req,res)=>{
       if (err) throw new Error(err)
         console.log("Uploaded in:", data.Location);  
       });
-      
-      })
+ })
+
+
+
+
+ const deleteFile = (filePath) => {
+      fs.unlink(filePath, () => {
+        console.log("file deleted");
+      });
+    };
+
+
+
+     
+ router.post("/upload-file-to-google-drive", upload.single("file"),async (req, res, next)=>{
+      try {
+        if (!req.file) {
+          res.status(400).send("No file uploaded.");
+          return;
+        }
+        const auth = authenticateGoogle();
+        const response = await uploadToGoogleDrive(req.file, auth);
+        deleteFile(req.file.path);
+        res.status(200).json({ response });
+      } catch (err) {
+        console.log(err); } 
+    });
 
 
 
