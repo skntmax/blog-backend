@@ -7,9 +7,11 @@ import path from 'path';
 import {s3} from './../s3Bucket'
 import { uploadToGoogleDrive  , authenticateGoogle } from './../google_drive' 
 import bcrypt from "bcrypt";
+import jwt  from 'jsonwebtoken';
 import { successServiceResponse , failureServiceResponse } from '../service_response/service_response';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 
 import config from './../config';
 
@@ -28,7 +30,6 @@ authRouter.get('/test', async (req, res) => {
   let existingUser = await userModel.findOne({
     email:'skntsdjee@gmail.com'
   }) 
-     
 
   console.log(existingUser);
 })
@@ -36,7 +37,6 @@ authRouter.get('/test', async (req, res) => {
 
 
 
-     
 authRouter.post('/signup', async (req, res) => {
    
      const { username, email , password ,adminPassword } = req.body
@@ -60,17 +60,52 @@ authRouter.post('/signup', async (req, res) => {
             }else{
                 res.send(failureServiceResponse(500,"user is already registered "))
              }
-
-          
-               
   
          }
      }catch(err){
           res.send(failureServiceResponse(500, err ))
-     }
-      
- 
+     }      
 })
+
+
+
+authRouter.post('/login', async (req, res) => {
+   
+  const {  email , password } = req.body
+
+  try{
+         let existingUser = await userModel.findOne({email:email  })
+         if(existingUser!=null) {
+             let hashPass = existingUser.password
+             let isTrueUser =await bcrypt.compare(password,hashPass)
+             if(isTrueUser) {
+                 let userModel = { username:existingUser.username ,email:existingUser.email ,isAdmin:existingUser.isAdmin }
+                 jwt.sign({ _id: existingUser._id }, config.secretKey , (err, token)=>{
+                  if(err) res.send(failureServiceResponse( 500 , err ))
+                  userModel.token = token 
+                  res.send(successServiceResponse(200, userModel , "Logged in" ))
+                });
+              }else{
+             res.send(failureServiceResponse( 500 , " Invalid login " ))
+              }
+         }else{
+             res.send(failureServiceResponse(500,"Please signup first  "))
+          }
+
+  }catch(err){
+       res.send(failureServiceResponse(500, err ))
+  }
+   
+})
+
+
+
+
+
+
+
+
+
 
 
  
