@@ -1,9 +1,10 @@
 import express from 'express'
-import { blogsModel ,userModel } from './../databse/models'
+import { blogsModel ,userModel, } from './../databse/models'
 import { upload } from './../databse/multer/mult'
 import fs, { createReadStream, unlink, unlinkSync } from 'fs'
 import {fileURLToPath} from 'url';
 import path from 'path';
+import { authMiddleware } from '../middlewares/authMiddleware';
 import {s3} from './../s3Bucket'
 import { uploadToGoogleDrive  , authenticateGoogle } from './../google_drive' 
 import bcrypt from "bcrypt";
@@ -100,6 +101,29 @@ authRouter.post('/login', async (req, res) => {
 
 
 
+
+
+
+
+authRouter.get('/login/:username',authMiddleware, async (req, res) => {
+
+ try{
+     
+            let username  = req.params.username
+            let id = req._id
+            
+          let userData =await userModel.findById(id)
+           let copy = JSON.parse( JSON.stringify(userData))
+            delete copy.password
+            delete copy._id
+         res.send(successServiceResponse(200, copy , " validated " ))
+
+ }catch(err){
+      res.send(failureServiceResponse(500, err ))
+ }
+  
+   
+})
 
 
 
