@@ -19,6 +19,31 @@ let blogsModel =  mongoose.model('blog',Schema({
 }))
 
 
+let userModel =  mongoose.model('user',Schema({
+   username:{
+      type:String,
+      required:true
+   }
+   ,
+   email:{
+        type:String,
+      required:true
+   } ,
+   password:{
+        type:String,
+        required:true
+   } , 
+   isAdmin:{
+       type:Boolean,
+    }
+ 
+}))
 
 
-export {blogsModel}
+
+
+
+
+
+
+export { blogsModel , userModel }

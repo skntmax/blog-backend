@@ -14,13 +14,14 @@ export const authenticateGoogle = () => {
      scopes: "https://www.googleapis.com/auth/drive",
    });
    return auth;
+    
  };
- 
+
 export  const uploadToGoogleDrive = async (file, auth) => {
    const fileMetadata = {
-     name: file.originalname,
-     parents: ["1DaWS1fqNObD3HCqz86g8KN6YV8kTxJWL"], // Change it according to your desired parent folder id
-   };
+      name: file.originalname,
+      parents: ["1DaWS1fqNObD3HCqz86g8KN6YV8kTxJWL"], // Change it according to your desired parent folder id
+    };
  
    const media = {
      mimeType: file.mimetype,

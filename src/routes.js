@@ -100,8 +100,6 @@ router.post('/image', upload.single('file') , async(req, res) => {
             console.log('====================================');
             console.log(" file saved id ", id  );
             console.log(' ====================================');
-
-           
             if (!req.file) {
                   res.status(400).send("No file uploaded.");
                   return;
@@ -126,9 +124,7 @@ router.post('/image', upload.single('file') , async(req, res) => {
         }
   })
 
-
-
-
+   
 
 router.post('/s3-upload',upload.single('file'), (req, res) => {
       try { 
