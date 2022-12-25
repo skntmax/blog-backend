@@ -1,8 +1,14 @@
 import mongoose from 'mongoose'
 import { Schema } from 'mongoose'
 
+let ObjectId = mongoose.Schema.ObjectId;
+ 
 let blogsModel =  mongoose.model('blog',Schema({
-    title:{
+   blogOwner :{
+      type:ObjectId,
+      required:false
+   } , 
+   title:{
        type:String,
        required:true
     }
@@ -20,7 +26,8 @@ let blogsModel =  mongoose.model('blog',Schema({
 
 
 let userModel =  mongoose.model('user',Schema({
-   username:{
+   
+    username:{
       type:String,
       required:true
    }
