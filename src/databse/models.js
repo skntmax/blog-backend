@@ -6,6 +6,7 @@ let ObjectId = mongoose.Schema.ObjectId;
 let blogsModel =  mongoose.model('blog',Schema({
    blogOwner :{
       type:ObjectId,
+      ref:'user',
       required:false
    } , 
    title:{
@@ -20,8 +21,7 @@ let blogsModel =  mongoose.model('blog',Schema({
     image:{
          type:Array,
          required:false
-    }
-  
+    }  
 }))
 
 

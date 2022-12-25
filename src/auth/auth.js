@@ -115,7 +115,6 @@ authRouter.get('/login/:username',authMiddleware, async (req, res) => {
           let userData =await userModel.findById(id)
            let copy = JSON.parse( JSON.stringify(userData))
             delete copy.password
-            delete copy._id
          res.send(successServiceResponse(200, copy , " validated " ))
 
  }catch(err){

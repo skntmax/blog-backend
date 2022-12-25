@@ -1,5 +1,5 @@
 import express from 'express'
-import { blogsModel } from './databse/models'
+import { blogsModel ,userModel } from './databse/models'
 import { upload } from './databse/multer/mult'
 import fs, { createReadStream, unlink, unlinkSync } from 'fs'
 import {fileURLToPath} from 'url';
@@ -25,15 +25,25 @@ router.get('/login', async (req, res) => {
 })
  
 router.post('/post', async (req, res) => {
-      let { title, disc } = req.body
-      let insertBlog = await blogsModel.insertMany([{
-            title: title,
-            disc: disc
-      }])
-      res.status(200).send({
-            status: 200,
-            result: { _id: insertBlog[0]._id }
-      }) 
+      let { title, disc  , userEmail } = req.body
+       let userExist =await userModel.findOne({email:userEmail})
+       if(userExist!=null) {
+            let insertBlog = await blogsModel.insertMany([{
+                  title: title,
+                  disc: disc,
+                  blogOwner:userExist._id
+            }])
+            res.status(200).send({
+                  status: 200,
+                  result: { _id: insertBlog[0]._id }
+            }) 
+      }else{
+            res.send({
+                  status: 500,
+                  message: "Unauthorized"
+            }) 
+      }
+      
   })
 
 
