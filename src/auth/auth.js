@@ -12,9 +12,10 @@ import jwt  from 'jsonwebtoken';
 import { successServiceResponse , failureServiceResponse } from '../service_response/service_response';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+let objectId = mongoose.SchemaType.objectId
 
 import config from './../config';
+import mongoose from 'mongoose';
 
 let authRouter = express.Router()
  
@@ -105,7 +106,7 @@ authRouter.post('/login', async (req, res) => {
 
 
 
-authRouter.get('/login/:username',authMiddleware, async (req, res) => {
+authRouter.get('/login/:username', authMiddleware , async (req, res) => {
 
  try{
      
@@ -129,6 +130,39 @@ authRouter.get('/login/:username',authMiddleware, async (req, res) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+authRouter.get('/get/files/:username', authMiddleware , async (req, res) => {
+
+  try{
+             let username  = req.params.username
+             let  {_id} = await userModel.findOne({username:username})
+              let userObjectId = _id.valueOf();
+              let userData =await blogsModel.find({blogOwner: userObjectId })              
+          res.send(successServiceResponse(200, userData , " files found  " ))
+           
+    }catch(err){
+        res.send(failureServiceResponse(500, err ))
+    }
+   
+ })
+ 
+ 
+ 
+ 
+ 
+ 
 
 
  

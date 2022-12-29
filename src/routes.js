@@ -175,11 +175,12 @@ router.get('/get-blogs' ,async  (req,res)=>{
         
        try{
               let blogs =  await  blogsModel.find({})
+               
                if(blogs) {
-                  res.status(200).send({
+                    res.status(200).send({
                         status: 200,
                         result: blogs                       }) 
-               }
+                 }
              
         } catch(err) {
             res.status(500).send({
@@ -190,7 +191,6 @@ router.get('/get-blogs' ,async  (req,res)=>{
         }
 
 })
-
 
 
 
@@ -211,9 +211,8 @@ router.post('/update', async (req,res)=>{
       res.status(500).send({
             status: 500,
             result: "no updated  " + err
-      })  
-    }
-      
+         })  
+      }
       })
 
 
@@ -223,6 +222,7 @@ router.get('/files', (req,res)=>{
    res.send(files)    
   });
 
+   
 })
 
 
@@ -234,16 +234,12 @@ router.get('/upload-file', (req,res)=>{
       Body : fs.createReadStream(filePath),
       Key : "folder/"+Date.now()+"_"+path.basename(filePath)
       };
-    
+
       s3.upload(params, function (err, data) {
-      
       if (err) throw new Error(err)
         console.log("Uploaded in:", data.Location);  
       });
  })
-
-
-
 
  const deleteFile = (filePath) => {
       fs.unlink(filePath, () => {
