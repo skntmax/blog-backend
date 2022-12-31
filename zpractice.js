@@ -1,6 +1,7 @@
 let str = 'shasji kant kumar yadav '
 
-let mySplit =(str)=>{     
+let mySplit =(str)=>{
+        
      return function(seperator) {
         let sp=0 
         let ep=0 
@@ -11,14 +12,11 @@ let mySplit =(str)=>{
            }else{
               ep=sp
                res.push(str.slice(sp,ep))
-           }    
-        }
-    
-        return res 
-     }
-    
-  
-
+              }    
+         }    
+          return res 
+      }
   }
+
 
   console.log( mySplit(str)(''))

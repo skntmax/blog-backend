@@ -21,16 +21,19 @@ let blogsModel =  mongoose.model('blog',Schema({
     image:{
          type:Array,
          required:false
-    }  
+    }  ,
+    createdOn:{
+       type:Date,
+        default:()=> Date.now()
+    }
 }))
-
-
+ 
 let userModel =  mongoose.model('user',Schema({
    
     username:{
       type:String,
       required:true
-   }
+    }
    ,
    email:{
         type:String,
@@ -42,7 +45,11 @@ let userModel =  mongoose.model('user',Schema({
    } , 
    isAdmin:{
        type:Boolean,
-    }
+    } ,
+    createdOn:{
+      type:Date,
+       default:()=> Date.now()
+   }
  
 }))
 
