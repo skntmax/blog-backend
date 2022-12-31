@@ -6,16 +6,18 @@ import {fileURLToPath} from 'url';
 import path from 'path';
 import {s3} from './s3Bucket'
 import { uploadToGoogleDrive  , authenticateGoogle } from './google_drive' 
-
+import mongoose from 'mongoose';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 import fileUpload from 'express-fileupload'
 import config from './config';
+import { failureServiceResponse, successServiceResponse } from './service_response/service_response';
+import { authMiddleware } from './middlewares/authMiddleware';
 
 let router = express.Router()
  
-let objectId = blogsModel.objectId
+let objectId = mongoose.Types.ObjectId
 
 // router.use(fileUpload())
      
@@ -262,6 +264,21 @@ router.get('/upload-file', (req,res)=>{
       } catch (err) {
         console.log(err); } 
     });
+
+
+    
+ router.get("/delete/:id", authMiddleware ,async (req, res)=>{
+      try {
+       let userId =req._id      
+       let id = req.params.id
+       let deletedBlog = await blogsModel.deleteOne({_id:objectId(id) , blogOwner:userId })
+        if(deletedBlog) {
+            res.send( successServiceResponse(200, deletedBlog , 'succesfully removed' ))             
+        }
+      } catch (err) {
+            res.send(failureServiceResponse(500, err ))
+     }
+ });
 
 
 

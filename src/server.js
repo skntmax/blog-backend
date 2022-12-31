@@ -16,7 +16,6 @@ middlewares(app)
 // ----------------middlewares ---------------
  
 
-
 // ----------------s3Bucket ---------------
 s3bucketInit()
 

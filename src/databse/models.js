@@ -49,7 +49,10 @@ let userModel =  mongoose.model('user',Schema({
     createdOn:{
       type:Date,
        default:()=> Date.now()
-   }
+     } ,
+     modifiedOn:{
+      type:Date
+     }
  
 }))
 
