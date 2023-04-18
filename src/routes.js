@@ -9,7 +9,6 @@ import { uploadToGoogleDrive  , authenticateGoogle } from './google_drive'
 import mongoose from 'mongoose';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 import fileUpload from 'express-fileupload'
 import config from './config';
 import { failureServiceResponse, successServiceResponse } from './service_response/service_response';
@@ -26,6 +25,8 @@ router.get('/login', async (req, res) => {
       console.log("list", list);
 })
  
+ 
+
 router.post('/post', async (req, res) => {
       let { title, disc  , userEmail } = req.body
        let userExist =await userModel.findOne({email:userEmail})
@@ -44,12 +45,10 @@ router.post('/post', async (req, res) => {
                   status: 500,
                   message: "Unauthorized"
             }) 
-      }
-      
+      }      
   })
 
 
-  
 
 // router.post('/image', upload.single('file') , async(req, res) => {
 //       const {id} = req.body 
@@ -218,6 +217,7 @@ router.post('/update', async (req,res)=>{
       })
 
 
+
 router.get('/files', (req,res)=>{
    let testFolder = path.join( __dirname ,'../my-uploads/')
    fs.readdir(testFolder, (err, files) => {
@@ -226,6 +226,9 @@ router.get('/files', (req,res)=>{
 
    
 })
+
+
+
 
 
 router.get('/upload-file', (req,res)=>{
@@ -251,6 +254,9 @@ router.get('/upload-file', (req,res)=>{
 
      
     
+
+  // uploading to google drive api   
+
  router.post("/upload-file-to-google-drive", upload.single("file"),async (req, res, next)=>{
       try {
         if (!req.file) {
@@ -279,10 +285,6 @@ router.get('/upload-file', (req,res)=>{
             res.send(failureServiceResponse(500, err ))
      }
  });
-
-
-
-
 
 
 

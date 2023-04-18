@@ -14,6 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 let objectId = mongoose.SchemaType.objectId
 
+import passport from 'passport-local'
 import config from './../config';
 import mongoose from 'mongoose';
 
@@ -162,7 +163,61 @@ authRouter.get('/get/files/:username', authMiddleware , async (req, res) => {
  
  
  
+authRouter.get('/google_login', async (req, res) => {
+
+  try{
+     console.log('====================================');
+     console.log("req. body " , req.body);
+     console.log('====================================');
+    
+           
+    }catch(err){
+        res.send(failureServiceResponse(500, err ))
+    }
+ })
+
+
+
+
+authRouter.post('/google_login', async (req, res) => {
+
+  try{
+     console.log('====================================');
+     console.log("req. body " , req.body);
+     console.log('====================================');
+    
+           
+    }catch(err){
+        res.send(failureServiceResponse(500, err ))
+    }
+   
+ })
  
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+//  authRouter.get('/passport-create-user' , ( req , res ) => {
+       
+//   app.post('/login', 
+//   passport.authenticate('local', { failureRedirect:  '/login' }),
+//   function(req, res) {
+//     res.redirect('/');
+//   });
+
+
+// })
+
+
 
 
  

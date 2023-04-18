@@ -28,6 +28,18 @@ app.get( '/'  , (req,res)=> {
 })
 
 
+
+app.get( '/read-xml'  , (req,res)=> { 
+           
+     var parser = new xml2js.Parser();
+     fs.readFile(__dirname + '/../public/sitemap.xml', function(err, data) {
+         if (!err) {
+             console.log(JSON.stringify(data));
+         }
+     });
+})
+
+
 app.listen(port,()=>{
          console.log(" server connected at  "+port );
 })
