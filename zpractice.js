@@ -55,11 +55,11 @@ let string = 's/g/shashi'
       } 
      return str
   }
- 
+
+   
   console.log('====================================');
   console.log(pattern( string , regx));
   console.log('===================================='); 
-
 
 
 

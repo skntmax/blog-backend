@@ -10,7 +10,6 @@ import { __dirname } from './middlewares'
 let app = express() 
 let port  = process.env.PORT 
 
-
 // ----------------middlewares ---------------
 middlewares(app)
 // ----------------middlewares ---------------

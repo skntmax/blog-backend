@@ -15,6 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 import { userModel } from './databse/models'
 import passportRouter from './passportjs/auth'
+import { v4 as uuidv4 } from 'uuid';
 
 var corsOptions = {
         optionsSuccessStatus: 200 ,// some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -22,6 +23,8 @@ var corsOptions = {
         origin:true
       }
       
+ 
+
 const middlewares =(app)=>{
   
      app.use(cookieParser())
@@ -29,28 +32,33 @@ const middlewares =(app)=>{
     app.use(bodyParser.urlencoded({ extended: true }))
     app.use(bodyParser.json())
     app.use(express.static( path.join( __dirname,"../my-uploads/") ) )
-   
+     
     app.use(session({
       secret: 'keyboard cat',
       resave: false ,
       saveUninitialized : true ,
-      cookie: { secure: true }
+      cookie: { secure: true  , 
+        maxAge: 30 * 24 * 60 * 60 * 1000
+      },
+    
     }))
 
     app.use(passport.initialize())
     app.use(passport.session())
 
-    passport.use(new LocalStrategy(
-      function(email, password, done) {
-        console.log(email , password)
-        userModel.findOne({ email: email } , function (err, user)  {
-           console.log('====================================');
-           console.log(user);
-           console.log('====================================');
-          if (err) { return done(err); }
-          if (!user) { return done(null, false ,  " user does not exist "); }
-          if (!bcrypt.compare(password , user.password)) { return done( null, false , "incorent password "); }
-          return done(null, user) ;
+     
+  passport.use(new LocalStrategy(
+      function( username , password , done ) {
+        console.log(username , password )
+        userModel.findOne({ email: username } , function (err, user)  {
+          if (err) { return done(err) }
+          if (!user) { return done( null, false ,  "user does not exist") }
+          if (bcrypt.compare( password , user.password ,(err, data)=>{
+            if(err){ return done( err); }
+            if(!data) { return done(null, false , "incorent password " )}
+            return done(null, user) ;
+          })) 
+           return done(null, false) ;
            });
          }
      )) ;
@@ -58,23 +66,27 @@ const middlewares =(app)=>{
      app.use('/user',router )
      app.use('/auth',authRouter)
      app.use('/passport',passportRouter)    
-  }
+      
 
-  
 passport.serializeUser((user, done )=>{      
-     if(user) {
-       return done(null, user.email  )
-     }
-    return done(null ,false )
+  if(user) {
+      return done(null,  user.id )
+    }
+   return done(null ,false )
 })
 
 
-passport.deserializeUser((user, done )=>{     
-   user.findOne({email:user.email} , (err, user)=>{
-    if(err) return done(null ,false )
-   return done(null , user)
-   })
+passport.deserializeUser((id , done )=>{     
+ userModel.findById(id , (err, user)=>{
+   if(err) return done(null ,false )
+    return done(null , user)
+  })
 })
+
+
+   
+    }
+
 
 
 export {middlewares}
