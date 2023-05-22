@@ -12,7 +12,7 @@ const awsConfig =  require('./configuration/aws_config')
     
    var filePath = "./package.json"; 
     //configuring parameters
-    
+
      var params = {
       Bucket: 'demo-shashi',
       Body : fs.createReadStream(filePath),
