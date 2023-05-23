@@ -13,7 +13,7 @@ import fileUpload from 'express-fileupload'
 import config from './config';
 import { failureServiceResponse, successServiceResponse } from './service_response/service_response';
 import { authMiddleware } from './middlewares/authMiddleware';
-
+import nodemailer from 'nodemailer'
 let router = express.Router()
  
 let objectId = mongoose.Types.ObjectId
@@ -257,6 +257,7 @@ router.get('/upload-file', (req,res)=>{
 
   // uploading to google drive api   
 
+ 
  router.post("/upload-file-to-google-drive", upload.single("file"),async (req, res, next)=>{
       try {
         if (!req.file) {
@@ -285,6 +286,59 @@ router.get('/upload-file', (req,res)=>{
             res.send(failureServiceResponse(500, err ))
      }
  });
+
+
+
+    
+ router.post("/send-enquiry" ,  (req, res)=>{
+
+      try {
+
+            const {name , email , subject , message } = req.body              
+            const sendmail = async  ( useremail  ,  udata=''  )=>{
+                     let transporter = nodemailer.createTransport({
+                         host: 'smtp.gmail.com',
+                         port: 465,
+                         secure: false,   
+                         service: 'gmail',
+                             auth: {
+                                 user: process.env.EMAIL,
+                                 pass: process.env.PASSWORD
+                             }
+                     })
+                     
+                     const mail_body = {
+                         from:  process.env.EMAIL,
+                         to: email,
+                         subject: subject,
+                         html: message 
+                     }  
+                     
+                     transporter.sendMail(mail_body, function(err, info) {
+                         if (err)  {
+                               console.log( "erro=> " + err)
+                               return 
+                              }
+                          else {
+                                console.log(info );
+                                return {message:"sent "}
+                          }
+                         
+                    })
+                 }
+
+                 sendmail().then(response=>{
+                   res.send(successServiceResponse(200,response ,"" ))
+                 }).catch(err=>{
+                  res.send(failureServiceResponse(500,err ))
+                 })
+                  
+      
+      } catch (err) {
+            res.send(failureServiceResponse(500, err ))
+     }
+ });
+
 
 
 
