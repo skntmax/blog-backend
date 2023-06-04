@@ -17,7 +17,6 @@ app.set('view engine', 'ejs')
 middlewares(app)
 // ----------------middlewares ---------------
  
-
 // ----------------s3Bucket ---------------
 s3bucketInit()
 // ----------------s3Bucket ---------------
@@ -26,12 +25,11 @@ s3bucketInit()
 app.get( '/'  , (req,res)=> {      
      console.log(" home page " , req.body );
 })
- 
-
+   
 app.get( '/read-xml'  , (req,res)=> { 
            
      var parser = new xml2js.Parser();
-     fs.readFile(__dirname + '/../public/sitemap.xml', function(err, data) {
+     fs.readFile( __dirname + '/../public/sitemap.xml', function(err, data) {
          if (!err) {
              console.log(JSON.stringify(data));
          }

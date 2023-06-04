@@ -293,9 +293,15 @@ router.get('/upload-file', (req,res)=>{
  router.post("/send-enquiry" ,  (req, res)=>{
 
       try {
-
             const {name , email , subject , message } = req.body              
-            const sendmail = async  ( useremail  ,  udata=''  )=>{
+             console.log('====================================');
+             console.log(req.body);
+             console.log('====================================');
+            
+
+             let f_message = `email sent by ${email} , Message :  ${message}`
+            
+             const sendmail = async  ( useremail  ,  udata=''  )=>{
                      let transporter = nodemailer.createTransport({
                          host: 'smtp.gmail.com',
                          port: 465,
@@ -309,9 +315,9 @@ router.get('/upload-file', (req,res)=>{
                      
                      const mail_body = {
                          from:  process.env.EMAIL,
-                         to: email,
+                         to: "skntjee@gmail.com",
                          subject: subject,
-                         html: message 
+                         html: f_message 
                      }  
                      
                      transporter.sendMail(mail_body, function(err, info) {
