@@ -1,36 +1,39 @@
 import  Express  from "express";
 import passport from 'passport'
 let passportRouter  = Express.Router()
+
 import { passportMiddleware } from "../passport_middleware/auth_middleware.js";
 
+
  passportRouter.post('/login' , passport.authenticate('local') ,  (req,res)=>{
-     
-   req.session.test? ++req.session.test:req.session.test=1
-    console.log(" logged in " , req.session );
+    console.log(req.body);
+    req.session.test? ++req.session.test:req.session.test=1
+   //  console.log(" logged in " , req.session );
      res.send({
-         user:  
-          {
-             username:req.user.username ,
-             sessions: req.session.test
-          } 
+         id:req.user._id
     }) 
  })
 
 
+ passportRouter.get('/login' , (req,res)=>{
+
+   res.render('login')
+ })
 
 
  passportRouter.get('/getUserBlogs' , passportMiddleware ,  (req,res)=>{
-   console.log('req.user' , req);  
-     if( req.user ) {
-        console.log('user logged in ' , req.user);  
-        return res.send(req.passport.user) 
-      } 
+    console.log(" passportMiddleware " ,  req.cookies  );
+     if(req.user) {
+        return res.send(req.user) 
+      }
+
     res.send({
          user:"not logged in "  
-    }) 
-
-
+    })
+     
+     
  })
+
 
 
 

@@ -28,6 +28,8 @@ let blogsModel =  mongoose.model('blog',Schema({
     }
 }))
  
+
+
 let userModel =  mongoose.model('user',Schema({
    
     username:{
@@ -59,8 +61,26 @@ let userModel =  mongoose.model('user',Schema({
 
 
 
+let todoModel =  mongoose.model('todo',Schema({
+ 
+   title:{
+     type:String,
+     required:true
+    },
+   discription:{
+      type:String,
+      required:true     
+   }
+  
+
+}))
 
 
 
 
-export { blogsModel , userModel }   
+
+
+
+
+
+export { blogsModel , userModel , todoModel }   

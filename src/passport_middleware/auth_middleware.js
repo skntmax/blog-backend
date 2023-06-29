@@ -1,10 +1,11 @@
 
  export const passportMiddleware  =  (req, res, done)=>{  
-     
-    if(res.user)
+   
+      if(res.user)
       {
-        return done(null, false ," user not logged in ")
+        return done(null, req.user ,"  user found ")
       }
-      return done(null, req.user)
+       
+      return done(null, false )
        
   }

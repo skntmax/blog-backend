@@ -8,6 +8,7 @@ import {fileURLToPath} from 'url';
 import cookieParser from 'cookie-parser'
 import passport  from 'passport'
 // let LocalStrategy = passport.LocalStrategy
+
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from 'bcrypt'
 import session from 'express-session'
@@ -16,6 +17,7 @@ export const __dirname = path.dirname(__filename);
 import { userModel } from './databse/models'
 import passportRouter from './passportjs/auth'
 import { v4 as uuidv4 } from 'uuid';
+import todo_router from './todo_router/router'
 
 var corsOptions = {
         optionsSuccessStatus: 200 ,// some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -26,8 +28,9 @@ var corsOptions = {
  
 
 const middlewares =(app)=>{
-  
-     app.use(cookieParser())
+   
+    //  app.use(cookieParser())
+    //  app.use(cookieParser())
     app.use(cors(corsOptions))
     app.use(bodyParser.urlencoded({ extended: true }))
     app.use(bodyParser.json())
@@ -37,15 +40,14 @@ const middlewares =(app)=>{
       secret: 'keyboard cat',
       resave: false ,
       saveUninitialized : true ,
-      cookie: { secure: true  , 
-        maxAge: 30 * 24 * 60 * 60 * 1000
+      cookie: { secure: false  , 
+        maxAge:  60 * 1000
       },
     
     }))
 
     app.use(passport.initialize())
     app.use(passport.session())
-
      
   passport.use(new LocalStrategy(
       function( username , password , done ) {
@@ -66,9 +68,9 @@ const middlewares =(app)=>{
      app.use('/user',router )
      app.use('/auth',authRouter)
      app.use('/passport',passportRouter)    
-      
-
-passport.serializeUser((user, done )=>{      
+     app.use('/todo',todo_router)    
+          
+passport.serializeUser(( user , done )=>{      
   if(user) {
       return done(null,  user.id )
     }
@@ -77,14 +79,12 @@ passport.serializeUser((user, done )=>{
 
 
 passport.deserializeUser((id , done )=>{     
- userModel.findById(id , (err, user)=>{
+ userModel.findById( id , ( err, user )=>{
    if(err) return done(null ,false )
     return done(null , user)
   })
 })
 
-
-   
     }
 
 
