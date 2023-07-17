@@ -1,5 +1,6 @@
 FROM node:14
 WORKDIR /home/shashikant/blog-backend/
-COPY . .
-CMD npm install 
-RUN [ "npm run dev"]
+COPY package*.json ./ 
+RUN npm install
+COPY . . 
+CMD [ "npm" ,"run" ,"dev"]
