@@ -18,6 +18,7 @@ import { userModel } from './databse/models'
 import passportRouter from './passportjs/auth'
 import { v4 as uuidv4 } from 'uuid';
 import todo_router from './todo_router/router'
+import bachelor from './bachelor/routes'
 
 var corsOptions = {
         optionsSuccessStatus: 200 ,// some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -69,6 +70,7 @@ const middlewares =(app)=>{
      app.use('/auth',authRouter )
      app.use('/passport', passportRouter)    
      app.use('/todo',todo_router)    
+     app.use('/bachelor',bachelor)    
           
 passport.serializeUser(( user , done )=>{      
   if(user) {

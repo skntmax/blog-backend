@@ -1,5 +1,5 @@
 import express from 'express'
-import { blogsModel ,userModel } from './databse/models'
+import { blogsModel ,userModel , bachelorCave } from './databse/models'
 import { upload } from './databse/multer/mult'
 import fs, { createReadStream, unlink, unlinkSync } from 'fs'
 import {fileURLToPath} from 'url';
@@ -28,8 +28,10 @@ router.get('/login', async (req, res) => {
  
 
 router.post('/post', async (req, res) => {
-      let { title, disc  , userEmail } = req.body
+      
+       let { title, disc  , userEmail } = req.body
        let userExist =await userModel.findOne({email:userEmail})
+        
        if(userExist!=null) {
             let insertBlog = await blogsModel.insertMany([{
                   title: title,
@@ -285,6 +287,31 @@ router.get('/upload-file', (req,res)=>{
             res.send(failureServiceResponse(500, err ))
      }
  });
+
+
+
+
+    
+ router.get("/bachelor-cave/", authMiddleware ,async (req, res)=>{
+      try {
+           
+     const bachlorBody  = req.body 
+        let bc = new bachelorCave(bachlorBody)
+ 
+        bc.save().then(()=>{
+             console.log(" bachelor data saved ");
+        })
+
+        res.send( successServiceResponse(200, bc , 'bachelor data ' ))             
+
+        
+         
+      } catch (err) {
+            res.send(failureServiceResponse(500, err ))
+     }
+ });
+
+
 
 
 

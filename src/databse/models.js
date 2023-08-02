@@ -71,7 +71,6 @@ let todoModel =  mongoose.model('todo',Schema({
       type:String,
       required:true     
    }
-  
 
 }))
 
@@ -82,5 +81,33 @@ let todoModel =  mongoose.model('todo',Schema({
 
 
 
+let bachelorCave =  mongoose.model('bachelor',Schema({
+ 
+   Amenities:{
+     type:Object,
+   //   required:true
+    },
+   ['Locality details']:{
+      type:Object,
+      // required:true     
+   },
+   ['Property details']:{
+      type:Object,
+      // required:true     
+   } ,
+   ['Rental details']:{
+      type:Object,
+      // required:true     
+   }
+   ,
+   Schedule:{
+      type:Object,
+      // required:true     
+   }
 
-export { blogsModel , userModel , todoModel }   
+}))
+
+
+
+
+export { blogsModel , userModel , todoModel ,bachelorCave  }   
