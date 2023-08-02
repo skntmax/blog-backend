@@ -6,19 +6,16 @@ import { failureServiceResponse, successServiceResponse } from "../service_respo
 
 
 
-bachelor_router.post('/bachelor-cave' ,  (req,res)=>{
+bachelor_router.post('/bachelor-cave' ,  async (req,res)=>{
     
    try{
         
    let bachelor_body = req.body
    let dt =  new bachelorCave(bachelor_body)
-   dt.save().then(()=>{
-     console.log("saved data ");
-   }).cathc(err=>{
-     console.log("err" , err );
-   })
+
+    let saved = await  dt.save()
+    res.send(successServiceResponse( 200 , dt, ' message saved '))
    
-   req.send(successServiceResponse( 200 , dt, ' message saved '))
     
    }catch(err){ 
       res.send(failureServiceResponse(500,  err) )
