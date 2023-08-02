@@ -28,6 +28,7 @@ s3bucketInit()
 app.get( '/'  , (req,res)=> {      
      console.log("home page " , req.body );
 })
+ 
 
 app.get( '/read-xml'  , (req,res)=> { 
            
@@ -37,9 +38,10 @@ app.get( '/read-xml'  , (req,res)=> {
              console.log(JSON.stringify(data));
          }
      });
+      
 })
 
 
-app.listen(port,()=>{
-         console.log(" server connected at  "+port );
+app.listen(port,()=>{ 
+         console.log(" server connected at  "+port );  
 })

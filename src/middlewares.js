@@ -63,11 +63,11 @@ const middlewares =(app)=>{
            return done(null, false) ;
            });
          }
-     )) ;
+   )) ;
 
      app.use('/user',router )
-     app.use('/auth',authRouter)
-     app.use('/passport',passportRouter)    
+     app.use('/auth',authRouter )
+     app.use('/passport', passportRouter)    
      app.use('/todo',todo_router)    
           
 passport.serializeUser(( user , done )=>{      
@@ -76,7 +76,6 @@ passport.serializeUser(( user , done )=>{
     }
    return done(null ,false )
 })
-
 
 passport.deserializeUser((id , done )=>{     
  userModel.findById( id , ( err, user )=>{
