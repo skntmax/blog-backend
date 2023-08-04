@@ -302,6 +302,7 @@ router.get('/upload-file', (req,res)=>{
              console.log(" bachelor data saved ");
         })
 
+         
         res.send( successServiceResponse(200, bc , 'bachelor data ' ))             
 
         

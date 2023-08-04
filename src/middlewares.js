@@ -70,7 +70,8 @@ const middlewares =(app)=>{
      app.use('/auth',authRouter )
      app.use('/passport', passportRouter)    
      app.use('/todo',todo_router)    
-     app.use('/bachelor',bachelor)    
+     app.use('/bachelor',bachelor)  
+        
           
 passport.serializeUser(( user , done )=>{      
   if(user) {
