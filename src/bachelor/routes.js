@@ -86,7 +86,11 @@ bachelor_router.get('/bachelor-search' ,  async (req,res)=>{
    try{
     
        const {city} = req.query 
-      console.log("qqq" , city );
+   
+      
+         if(Object.keys(req.query).length==0) {
+             return res.send(failureServiceResponse(500, ` please provide atleast "city" `) )
+         }else{
         let matched_dresult = await   bachelorCave.aggregate([
     
          //   {$project:{ "Locality details" :1 }}
@@ -95,17 +99,17 @@ bachelor_router.get('/bachelor-search' ,  async (req,res)=>{
             { 
             $match: { "Locality details.City" :{$regex:".*"+city+".*" , $options:"i" } }     
            },
-
-
         ])
 
-    console.log(matched_dresult,"matched_dresult");
-    
      if(matched_dresult.length>0){
        return res.send(successServiceResponse( 200 , matched_dresult, ` ${city}_serch_result ` ))
     }else{
       return res.send(failureServiceResponse(500,  " no search result found ") )
     }
+
+             
+         }
+   
    
    }catch(err){ 
       return res.send(failureServiceResponse(500,  err) )
