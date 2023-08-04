@@ -3,7 +3,35 @@ let bachelor_router  = Express.Router()
 import { todoModel , bachelorCave } from "../databse/models";
 import { failureServiceResponse, successServiceResponse } from "../service_response/service_response"; 
 
-
+let cities = [
+   'Adilabad',
+   'Anantapur',
+   'Chittoor',
+   'Kakinada',
+   'Guntur',
+   'Hyderabad',
+   'Karimnagar',
+   'Khammam',
+   'Krishna',
+   'Kurnool',
+   'Mahbubnagar',
+   'Medak',
+   'Nalgonda',
+   'Nizamabad',
+   'Ongole',
+   'Hyderabad',
+   'Srikakulam',
+   'Nellore',
+   'Visakhapatnam',
+   'Vizianagaram',
+   'Warangal',
+   'Eluru',
+   'Kadapa',
+   'noida',
+   'kolkata',
+   "chandigarh"
+]
+ 
 
 
 bachelor_router.post('/bachelor-cave' ,  async (req,res)=>{
@@ -20,9 +48,11 @@ bachelor_router.post('/bachelor-cave' ,  async (req,res)=>{
       return res.send(failureServiceResponse(500,  "please provide valid object " ) )
      }
     
-    let dt =  new bachelorCave(bachelor_body)
-    let saved = await  dt.save()
+     
+          let dt =  new bachelorCave(bachelor_body)
+         let saved = await  dt.save()
     
+   
      return  res.send(successServiceResponse( 200 , dt, ' message saved '))
    
    }catch(err){ 
@@ -30,8 +60,6 @@ bachelor_router.post('/bachelor-cave' ,  async (req,res)=>{
    }
     
 })
-
-
 
 
 
@@ -50,6 +78,40 @@ bachelor_router.get('/bachelor-list' ,  async (req,res)=>{
 
 
 
+
+
+
+
+bachelor_router.get('/bachelor-search' ,  async (req,res)=>{
+   try{
+    
+       const {city} = req.query 
+      console.log("qqq" , city );
+        let matched_dresult = await   bachelorCave.aggregate([
+    
+         //   {$project:{ "Locality details" :1 }}
+         //   ,      
+
+            { 
+            $match: { "Locality details.City" :{$regex:".*"+city+".*" , $options:"i" } }     
+           },
+
+
+        ])
+
+    console.log(matched_dresult,"matched_dresult");
+    
+     if(matched_dresult.length>0){
+       return res.send(successServiceResponse( 200 , matched_dresult, ` ${city}_serch_result ` ))
+    }else{
+      return res.send(failureServiceResponse(500,  " no search result found ") )
+    }
+   
+   }catch(err){ 
+      return res.send(failureServiceResponse(500,  err) )
+   }
+    
+})
 
 
 
